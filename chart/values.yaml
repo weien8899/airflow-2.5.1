@@ -46,7 +46,7 @@ securityContext: {}
 airflowHome: /opt/airflow
 
 # Default airflow repository -- overridden by all the specific images below
-defaultAirflowRepository: apache/airflow
+defaultAirflowRepository: weien8899/airflow-2.5.1
 
 # Default airflow tag to deploy
 defaultAirflowTag: "2.5.1"
@@ -1784,6 +1784,7 @@ config:
     # For Airflow 1.10, backward compatibility; moved to [logging] in 2.0
     colored_console_log: 'False'
     remote_logging: '{{- ternary "True" "False" .Values.elasticsearch.enabled }}'
+    default_timezone: 'Asia/Shanghai'
   logging:
     remote_logging: '{{- ternary "True" "False" .Values.elasticsearch.enabled }}'
     colored_console_log: 'False'
@@ -1793,6 +1794,8 @@ config:
     statsd_prefix: airflow
     statsd_host: '{{ printf "%s-statsd" .Release.Name }}'
   webserver:
+    default_ui_timezone: 'Asia/Shanghai'
+    expose_config: 'True'
     enable_proxy_fix: 'True'
     # For Airflow 1.10
     rbac: 'True'
