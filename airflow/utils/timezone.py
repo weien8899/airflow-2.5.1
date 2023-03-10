@@ -26,7 +26,15 @@ from pendulum.datetime import DateTime
 
 # UTC time zone as a tzinfo instance.
 utc = pendulum.tz.timezone("UTC")
-
+from airflow import configuration as conf
+try:
+	tz = conf.get("core", "default_timezone")
+	if tz == "system":
+		utc = pendulum.local_timezone()
+	else:
+		utc = pendulum.timezone(tz)
+except Exception:
+	pass
 
 def is_localized(value):
     """
@@ -59,7 +67,7 @@ def utcnow() -> dt.datetime:
     # pendulum utcnow() is not used as that sets a TimezoneInfo object
     # instead of a Timezone. This is not picklable and also creates issues
     # when using replace()
-    result = dt.datetime.utcnow()
+    result = dt.datetime.now()
     result = result.replace(tzinfo=utc)
 
     return result
